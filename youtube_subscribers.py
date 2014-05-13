@@ -83,6 +83,10 @@ def getUsers(youtube,pageToken = "", maxResults=5,users=[]):
       pageToken = pageToken
         ).execute()
   nextPageToken = response.get('nextPageToken')
+  processed = [[u['snippet']['channelId'], u['snippet']['publishedAt']] for u in response['items']]
+
+  for u in processed:
+    print u
   return [[u['snippet']['channelId'], u['snippet']['publishedAt']] for u in response['items']], nextPageToken
 	
 
@@ -94,12 +98,13 @@ if __name__ == "__main__":
   youtube = get_authenticated_service(args)
   master_user_list = []
   nextPageToken = ""
-  pageLimit = 10
+  pageLimit = 500
   pageCount = 0
   errCount = 0
   errLimit = 10
   userTotal = 0
   wait = 1
+  regular_wait = 45
   while nextPageToken is not None and pageCount < pageLimit and errCount < errLimit:
     try:
       users, nextPageToken = getUsers(youtube,maxResults=50,pageToken = nextPageToken)
@@ -109,13 +114,14 @@ if __name__ == "__main__":
       print "%s users collected"%userTotal
       master_user_list += users
       pageCount += 1
+      regular_wait = regular_wait * 1.1
     except HttpError,e:
       print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
       print "%s tries out of %s, waiting %s seconds"%(errCount, errLimit,wait)
       time.sleep(wait)
       wait = (2*random.random())
       errCount += 1
-    time.sleep(3)
+    time.sleep(regular_wait)
       
   outString = ""
   for u in master_user_list:
