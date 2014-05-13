@@ -13,12 +13,6 @@ from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
 
 
-# The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
-# the OAuth 2.0 information for this application, including its client_id and
-# client_secret. You can acquire an OAuth 2.0 client ID and client secret from
-# the Google Developers Console at
-# https://console.developers.google.com/.
-# Please ensure that you have enabled the YouTube Data API for your project.
 # For more information about using OAuth2 to access the YouTube Data API, see:
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
@@ -98,7 +92,7 @@ if __name__ == "__main__":
   youtube = get_authenticated_service(args)
   master_user_list = []
   nextPageToken = ""
-  pageLimit = 500
+  pageLimit = 750
   pageCount = 0
   errCount = 0
   errLimit = 10
